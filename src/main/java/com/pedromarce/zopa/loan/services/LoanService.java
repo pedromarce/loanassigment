@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,10 +26,13 @@ public class LoanService {
     private static final Logger logger = LoggerFactory.getLogger(LoanService.class);
 
     private static int MONTHS_LOAN = 36;
+    private static int MONTHS_PERIOD_RATE = 12;
+    private static int MINIMUM_LOAN_AMOUNT = 1000;
+    private static int MAXIMUM_LOAN_AMOUNT = 15000;
 
     private boolean headerProcessed;
 
-    public LoanRequest requestCommandLine(@NotNull List<String> arguments) {
+    public LoanRequest requestCommandLine(List<String> arguments) {
 
         if (arguments.size() != 2) throw new InitialisationException("Wrong number of arguments", null);
 
@@ -63,7 +65,7 @@ public class LoanService {
 
     }
 
-    private List<Borrower> validateFile(@NotNull final String csvFileName) {
+    private List<Borrower> validateFile(final String csvFileName) {
         headerProcessed = false;
         try (Stream<String> stream = Files.lines(Paths.get(csvFileName))) {
             return stream.map(this::parseBorrower)
@@ -74,12 +76,12 @@ public class LoanService {
         }
     }
 
-    private void validateAmount(@NotNull final int amount) {
-        if (amount < 1000 || amount > 15000 || amount % 100 != 0)
+    private void validateAmount(final int amount) {
+        if (amount < MINIMUM_LOAN_AMOUNT || amount > MAXIMUM_LOAN_AMOUNT || amount % 100 != 0)
             throw new InitialisationException("Amount is Not Valid", null);
     }
 
-    private Borrower parseBorrower(@NotNull String csvLine) {
+    private Borrower parseBorrower(String csvLine) {
         if (!headerProcessed) {
             if (!csvLine.equals("Lender,Rate,Available"))
                 throw new InitialisationException("File is Bad Formatted", null);
@@ -95,7 +97,7 @@ public class LoanService {
     }
 
     private Double calculateRate(final LoanRequest loanRequest, final Double monthlyQuota) {
-        return 12 * (Math.pow((monthlyQuota * loanRequest.getMonths()) / loanRequest.getAmountRequested(), 1 / loanRequest.getMonths()) - 1.0);
+        return MONTHS_PERIOD_RATE * (Math.pow((monthlyQuota * loanRequest.getMonths()) / loanRequest.getAmountRequested(), 1 / loanRequest.getMonths()) - 1.0);
     }
 
 }

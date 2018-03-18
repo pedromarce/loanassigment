@@ -1,13 +1,11 @@
 package com.pedromarce.zopa.loan.dtos;
 
-import com.pedromarce.zopa.loan.LoanApplication;
 import com.pedromarce.zopa.loan.exception.ParseBorrowerException;
 import lombok.Builder;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
@@ -23,7 +21,7 @@ public class Borrower {
 
     private Long available;
 
-    public static Borrower fromCSV(@NotNull final String csvValue) throws ParseBorrowerException {
+    public static Borrower fromCSV(final String csvValue) {
         try {
             String[] values = csvValue.split(",");
             if (values.length != 3) throw new ParseBorrowerException(null);

@@ -3,41 +3,33 @@ package com.pedromarce.zopa.loan.components;
 import com.pedromarce.zopa.loan.dtos.Borrower;
 import com.pedromarce.zopa.loan.dtos.LoanRequest;
 import com.pedromarce.zopa.loan.exception.NotBorrowerAvailableException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
-import java.util.List;
 
-@Component
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 public class Loan {
 
+    private static int MONTHS_LOAN = 36;
+    private static float MONTHS_PERIOD_RATE = 12;
+
     private LoanRequest loanRequest;
-
-    private long amountAvailable;
-
-    public boolean validateAmount(long amountRequested) {
-        return amountAvailable >= amountRequested;
-    }
 
     private void initialiseBorrowers() {
         final Comparator<Borrower> comparator = Comparator
                 .comparing(Borrower::getRate);
         loanRequest.getBorrowers().sort(comparator);
-        this.amountAvailable = loanRequest.getBorrowers().stream()
-                .map(Borrower::getAmount)
-                .reduce(0L, (a, b) -> a + b);
     }
 
     public Double getMonthlyQuota(final LoanRequest request) {
-        long amountBorrowed,
-                amountPending = request.getAmountRequested();
+        long amountBorrowed;
+        long amountPending = request.getAmountRequested();
         initialiseBorrowers();
         Double monthlyQuota = 0.0;
         for (Borrower borrower : loanRequest.getBorrowers()) {
@@ -49,8 +41,8 @@ public class Loan {
         throw new NotBorrowerAvailableException();
     }
 
-    private Double calculateMonthlyQuota(final Double rate, final long amount, final long months) {
-        return (amount * Math.pow(1.0 + (rate / months), months)) / months;
+    protected Double calculateMonthlyQuota(final Double rate, final long amount, final float months) {
+        return (amount * Math.pow(1.0 + (rate / MONTHS_PERIOD_RATE), months)) / months;
     }
 
 }

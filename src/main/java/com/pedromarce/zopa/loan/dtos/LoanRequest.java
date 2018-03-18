@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -16,7 +15,7 @@ public class LoanRequest {
 
     private long amountRequested;
 
-    private long months;
+    private float months;
 
     private List<Borrower> borrowers;
 

@@ -3,6 +3,16 @@
   <component name="issues">
     <option name="index">
       <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/pedromarce/zopa/loan/InitialisationException.java">
           <value>
             <set />
@@ -98,7 +108,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/testdata.csv">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/test/java/com/pedromarce/zopa/loan/LoanApplicationTests.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/com/pedromarce/zopa/loan/components/LoanTest.java">
           <value>
             <set />
           </value>
@@ -149,6 +169,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/resources/badformatrate.csv">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/resources/testbasicdata.csv">
           <value>
             <set />
           </value>

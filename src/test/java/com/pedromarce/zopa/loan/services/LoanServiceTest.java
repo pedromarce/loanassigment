@@ -1,7 +1,7 @@
 package com.pedromarce.zopa.loan.services;
 
-import com.pedromarce.zopa.loan.components.Loan;
 import com.pedromarce.zopa.loan.dtos.LoanRequest;
+import com.pedromarce.zopa.loan.dtos.LoanResult;
 import com.pedromarce.zopa.loan.exception.InitialisationException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,10 +13,25 @@ public class LoanServiceTest {
     private LoanService loanService = new LoanService();
 
     @Test
-    public void calculateLoan() {
-        LoanRequest loanRequest = loanService.requestCommandLine(Arrays.asList("src/test/resources/testdata.csv","1000"));
+    public void calculateLoanSingleBorrower() {
+        LoanRequest loanRequest = loanService.requestCommandLine(Arrays.asList("src/test/resources/testbasicdata.csv", "1000"));
 
-        loanService.calculateLoan(loanRequest).printResults();
+        LoanResult loanResult = loanService.calculateLoan(loanRequest);
+        Assert.assertEquals(28.62, loanResult.getMontlyQuota(), 0.009);
+        Assert.assertEquals(0.01, loanResult.getRate(), 0.001);
+
+
+    }
+
+    @Test
+    public void calculateLoanMultipleBorrower() {
+        LoanRequest loanRequest = loanService.requestCommandLine(Arrays.asList("src/test/resources/testbasicdata.csv", "2000"));
+
+        LoanResult loanResult = loanService.calculateLoan(loanRequest);
+        Assert.assertEquals(58.11, loanResult.getMontlyQuota(), 0.01);
+        Assert.assertEquals(0.015, loanResult.getRate(), 0.001);
+
+
     }
 
     @Test
@@ -24,7 +39,7 @@ public class LoanServiceTest {
         LoanRequest loanRequest = loanService.requestCommandLine(Arrays.asList("src/test/resources/testdata.csv","10000"));
         Assert.assertNotNull("Request is created ",loanRequest);
         Assert.assertEquals(10000,loanRequest.getAmountRequested());
-        Assert.assertEquals(36,loanRequest.getMonths());
+        Assert.assertEquals(36, loanRequest.getMonths(), 0.0);
         Assert.assertEquals(7, loanRequest.getBorrowers().size());
     }
 
